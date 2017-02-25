@@ -1,25 +1,30 @@
 import React, { Component } from 'react'
 import Facebook from './facebook'
-import Stripe from './stripe'
+import StripeDashboard from './stripe'
 
 class Container extends Component {
   constructor (props) {
     super(props)
-    this.handleFacebookLogin = this.onFacebookLogin.bind(this);
+    this.state = {stripeId: null}
+    this.onFetchyLogin = this.onFetchyLogin.bind(this)
   }
 
   componentDidMount () {}
 
   render () {
-    return <div>
-      <Facebook onLogin={this.handleFacebookLogin} />
-      <Stripe />
-    </div>
+    var components = []
+    components.push(<Facebook onLogin={this.onFetchyLogin} key={0} />)
+    if (this.state.stripeId) {
+      components.push(<div key={1}>-------------------------------<br /></div>)
+      components.push(<StripeDashboard stripeId={this.state.stripeId} key={2} />)
+    }
+
+    return <div> {components} </div>
   }
 
-  onFacebookLogin () {
+  onFetchyLogin (stripeCustomerId) {
     this.setState({
-      loggedIn: true
+      stripeId: stripeCustomerId
     })
   }
 }

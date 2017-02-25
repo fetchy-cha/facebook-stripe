@@ -1,4 +1,4 @@
-/*global FB*/
+/* global FB */
 import axios from 'axios'
 import React, { Component } from 'react'
 
@@ -24,7 +24,7 @@ function FetchyDashboard (props) {
 class Facebook extends Component {
   constructor (props) {
     super(props)
-    this.parentCallback = props.onLogin
+    this.parentCallback = this.props.onLogin
     this.state = { 
       fbLoggedIn: false,
       fetchyLoggedIn: false
@@ -116,11 +116,11 @@ class Facebook extends Component {
         stripeCustomerId: response.data.stripe_id,
         fetchyLoggedIn: true
       })
+      this.parentCallback(response.data.stripe_id)
     }).catch(error => {
       if (error.response.data.error === 'account already taken') {
         this.fetchyLogin()
-      }
-      else {
+      } else {
         console.log(error.response.data)
       }
     })
@@ -139,15 +139,15 @@ class Facebook extends Component {
       }
     })
     .then(response => {
-      console.log(response.data)
       this.setState({
         fetchyUUID: response.data.uuid,
         fetchyToken: response.data.token,
         stripeCustomerId: response.data.stripe_id,
         fetchyLoggedIn: true
       })
+      this.parentCallback(response.data.stripe_id)
     }).catch(error => {
-      console.log(error.response.data)
+      console.log(error)
     })
   }
 
